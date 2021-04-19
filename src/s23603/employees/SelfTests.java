@@ -1,4 +1,4 @@
-import s23603.*;
+package s23603.employees;
 
 import java.io.File;
 

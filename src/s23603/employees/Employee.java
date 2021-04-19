@@ -1,4 +1,4 @@
-package s23603;
+package s23603.employees;
 
 public class Employee
 {
