@@ -58,11 +58,10 @@ public class Employee
         this.surname = surname;
     }
     
-    public void setPosition(Position position){
+    public void setPositionAndSalary(Position position, int salary){
+        validatePositionAndSalary(position,salary);
+        
         this.position = position;
-    }
-    
-    public void setSalary(int salary){
         this.salary = salary;
     }
     
@@ -88,6 +87,11 @@ public class Employee
     public static void validateSurname(String surname){
         if(!isValidSurname(surname))
             throw new IllegalArgumentException(surname + " is not a valid surname.");
+    }
+    
+    public static void validatePositionAndSalary(Position position, int salary){
+        if(!position.isValidSalary(salary))
+            throw new IllegalArgumentException(salary + " is not a valid salary for position of " + position + ".");
     }
     
     

@@ -22,4 +22,8 @@ public enum Position
     public int getMaxSalary(){
         return maxSalary;
     }
+    
+    public boolean isValidSalary(int salary){
+        return salary >= getMinSalary() && salary <= getMaxSalary();
+    }
 }

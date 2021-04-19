@@ -1,4 +1,5 @@
 import s23603.Employee;
+import s23603.Position;
 
 public class SelfTests
 {
@@ -51,9 +52,16 @@ public class SelfTests
         
             return false;
         }catch(IllegalArgumentException ignored){}
+    
+        try{
+            employee.setPositionAndSalary(Position.CEO,1);
+        
+            return false;
+        }catch(IllegalArgumentException ignored){}
         
         employee.setName("Jan");
         employee.setSurname("Jan Kowalski");
+        employee.setPositionAndSalary(Position.CEO,9_000);
         
         return true;
     }
