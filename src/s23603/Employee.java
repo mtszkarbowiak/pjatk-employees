@@ -1,7 +1,5 @@
 package s23603;
 
-import java.util.MissingFormatArgumentException;
-
 public class Employee
 {
     private String name, surname;
@@ -9,7 +7,7 @@ public class Employee
     private int salary, experience;
     
     private static final char SEPARATOR = ';';
-    private static final String NAME_SURNAME_REGEX = "^[A-Za-z][A-Za-z .]{1,48}[A-Za-z]$";
+    private static final String NAME_SURNAME_REGEX = "^[A-Za-z][A-Za-z0-9 .]{1,48}[A-Za-z0-9]$";
     
     
     
