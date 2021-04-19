@@ -1,5 +1,7 @@
 package s23603;
 
+import java.util.MissingFormatArgumentException;
+
 public class Employee
 {
     private String name, surname;
@@ -7,6 +9,7 @@ public class Employee
     private int salary, experience;
     
     private static final char SEPARATOR = ';';
+    private static final String NAME_SURNAME_REGEX = "^[A-Za-z][A-Za-z .]{1,48}[A-Za-z]$";
     
     
     
@@ -19,6 +22,8 @@ public class Employee
         this.salary = salary;
         this.experience = experience;
     }
+    
+    
     
     public String getName(){
         return name;
@@ -41,6 +46,50 @@ public class Employee
     }
     
     
+    public void setName(String name){
+        validateName(name);
+        
+        this.name = name;
+    }
+    
+    public void setSurname(String surname){
+        validateSurname(surname);
+        
+        this.surname = surname;
+    }
+    
+    public void setPosition(Position position){
+        this.position = position;
+    }
+    
+    public void setSalary(int salary){
+        this.salary = salary;
+    }
+    
+    public void setExperience(int experience){
+        this.experience = experience;
+    }
+    
+    
+    
+    public static boolean isValidName(String name){
+        return name.matches(NAME_SURNAME_REGEX);
+    }
+    
+    public static boolean isValidSurname(String surname){
+        return surname.matches(NAME_SURNAME_REGEX);
+    }
+    
+    public static void validateName(String name){
+        if(!isValidName(name))
+            throw new IllegalArgumentException(name + " is not a valid name.");
+    }
+    
+    public static void validateSurname(String surname){
+        if(!isValidSurname(surname))
+            throw new IllegalArgumentException(surname + " is not a valid surname.");
+    }
+    
     
     
     public String serialize(){
@@ -51,24 +100,32 @@ public class Employee
                 + SEPARATOR + experience;
     }
     
+    public void deserialize(String src){
+        var args = src.split(String.valueOf(SEPARATOR));
+        
+        if(args.length != 5)
+            throw new IllegalArgumentException(src + " does not consist of 5 arguments.");
+    
+        var nameCached = args[0];
+        var surnameCached = args[1];
+        var positionCached = Position.valueOf(args[2]);
+        var salaryCached = Integer.parseInt(args[3]);
+        var experienceCached = Integer.parseInt(args[4]);
+    
+        validateName(nameCached);
+        validateSurname(surnameCached);
+    
+        this.name = nameCached;
+        this.surname = surnameCached;
+        this.position = positionCached;
+        this.salary = salaryCached;
+        this.experience = experienceCached;
+    }
+    
     public boolean tryDeserialize(String src){
         try{
-            var args = src.split(String.valueOf(SEPARATOR));
-            
-            var nameCached = args[0];
-            var surnameCached = args[1];
-            var positionCached = Position.valueOf(args[2]);
-            var salaryCached = Integer.parseInt(args[3]);
-            var experienceCached = Integer.parseInt(args[4]);
-    
-            this.name = nameCached;
-            this.surname = surnameCached;
-            this.position = positionCached;
-            this.salary = salaryCached;
-            this.experience = experienceCached;
-    
+            deserialize(src);
             return true;
-            
         }catch(Exception ex){
             return false;
         }
