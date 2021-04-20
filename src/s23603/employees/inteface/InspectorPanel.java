@@ -19,7 +19,7 @@ public class InspectorPanel extends ColumnsPanel
         salarySpinner = new JSpinner();
         experienceSpinner = new JSpinner();
     
-        buildSectionTitle("Attributes");
+        buildSectionTitle("Attributes","Editable attributes of selected employee. Confirm to validate and apply changes.");
         buildLabeledEditorRow(UserInterface.ATTRIBUTE_NAMES[0],nameField);
         buildLabeledEditorRow(UserInterface.ATTRIBUTE_NAMES[1],surnameField);
         buildLabeledEditorRow(UserInterface.ATTRIBUTE_NAMES[2],positionComboBox);
@@ -28,7 +28,7 @@ public class InspectorPanel extends ColumnsPanel
     }
     
     protected void buildLabeledEditorRow(String label, Component right){
-        buildRow(new JLabel(label), right, 0.3f);
+        buildRow(new JLabel(label), right);
     }
     
     public void inspect(Employee employee)

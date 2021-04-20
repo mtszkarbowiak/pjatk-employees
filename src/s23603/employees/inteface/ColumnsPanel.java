@@ -5,7 +5,7 @@ import java.awt.*;
 
 public abstract class ColumnsPanel extends JPanel
 {
-    private GridBagLayout layout;
+    private final GridBagLayout layout;
     
     public ColumnsPanel(){
         layout = new GridBagLayout();
@@ -19,9 +19,9 @@ public abstract class ColumnsPanel extends JPanel
     
     private int inspectionRow = 0;
     
-    protected void buildRow(Component left, Component right, float lw){
-        var leftConstraints = generateConstraints(0,inspectionRow, lw, 0f);
-        var rightConstraints = generateConstraints(1,inspectionRow, 1.0f - lw, 0f);
+    protected void buildRow(Component left, Component right){
+        var leftConstraints = generateConstraints(0,inspectionRow);
+        var rightConstraints = generateConstraints(1,inspectionRow);
         inspectionRow++;
         
         add(left,leftConstraints);
@@ -30,7 +30,7 @@ public abstract class ColumnsPanel extends JPanel
         layout.addLayoutComponent(right,rightConstraints);
     }
     
-    protected void buildSectionTitle(String title){
+    protected void buildSectionTitle(String title, String tooltip){
         var constraints = new GridBagConstraints();
         constraints.gridx = 0;
         constraints.gridy = inspectionRow;
@@ -44,19 +44,20 @@ public abstract class ColumnsPanel extends JPanel
         var label = new JLabel(title);
         label.setHorizontalAlignment(JLabel.CENTER);
         label.setBorder(BorderFactory.createEtchedBorder());
+        label.setToolTipText(tooltip);
         
         add(label,constraints);
         layout.addLayoutComponent(label,constraints);
         inspectionRow++;
     }
     
-    protected static GridBagConstraints generateConstraints(int x, int y, float wx, float wy){
+    protected static GridBagConstraints generateConstraints(int x, int y){
         var result = new GridBagConstraints();
         
         result.gridx = x;
         result.gridy = y;
-        result.weightx = wx;
-        result.weighty = wy;
+        result.weightx = (float) 0.5;
+        result.weighty = (float) 0.0;
         
         result.fill = GridBagConstraints.BOTH;
         
