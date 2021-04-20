@@ -1,17 +1,17 @@
 package s23603.employees.inteface;
 
+import s23603.employees.Employee;
 import s23603.employees.EmployeeListIO;
 
 import javax.swing.table.AbstractTableModel;
 
-class TableModel extends AbstractTableModel
+class ExplorerTableModel extends AbstractTableModel
 {
     EmployeeListIO employeeListIO;
     
-    public TableModel(EmployeeListIO employeeListIO)
+    public ExplorerTableModel(EmployeeListIO employeeListIO)
     {
         this.employeeListIO = employeeListIO;
-        
     }
     
     @Override
@@ -29,14 +29,7 @@ class TableModel extends AbstractTableModel
     @Override
     public String getColumnName(int index)
     {
-        return switch(index){
-            case 0 -> "Name";
-            case 1 -> "Surname";
-            case 2 -> "Position";
-            case 3 -> "Salary";
-            case 4 -> "Experience";
-            default -> throw new IllegalArgumentException();
-        };
+        return UserInterface.ATTRIBUTE_NAMES[index];
     }
     
     @Override

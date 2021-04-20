@@ -8,6 +8,8 @@ import java.awt.event.*;
 
 public class UserInterface extends JFrame
 {
+    public static final String[] ATTRIBUTE_NAMES = {"Name", "Surname", "Position", "Salary", "Experience"};
+    
     private JMenuBar menuBar;
     private JSplitPane contentPanel;
     
@@ -20,13 +22,24 @@ public class UserInterface extends JFrame
     private JTable table;
     
     private JTabbedPane tabs;
-    private InspectorPanel inspectorPanel;
+    private Inspector inspector;
     
     private EmployeeListIO employeeListIO;
     
     
     public UserInterface(EmployeeListIO employeeListIO){
         super("Employees Data List");
+        
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+            
+            for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
+                if (info.getName().equals("Nimbus")) {
+                    UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (Exception ignored) {}
         
         this.employeeListIO = employeeListIO;
         
@@ -54,21 +67,21 @@ public class UserInterface extends JFrame
         {
             {
                 table = new JTable();
-                table.setModel(new TableModel(employeeListIO));
+                table.setModel(new ExplorerTableModel(employeeListIO));
                 table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
                 table.getSelectionModel().addListSelectionListener(e ->
-                        inspectorPanel.inspect(employeeListIO.get(table.getSelectedRow()))
+                        inspector.inspect(employeeListIO.get(table.getSelectedRow()))
                 );
         
                 tableScrollPane = new JScrollPane(table);
             }
             
             {
-                inspectorPanel = new InspectorPanel();
+                inspector = new Inspector();
             }
     
             tabs = new JTabbedPane();
-            tabs.addTab("Inspector", inspectorPanel);
+            tabs.addTab("Inspector", inspector);
             tabs.addTab("Filter", new JPanel());
             
             contentPanel = new JSplitPane();
