@@ -15,7 +15,7 @@ public class InspectorPanel extends ColumnsPanel
     {
         nameField = new JTextField();
         surnameField = new JTextField();
-        positionComboBox = new JComboBox<>();
+        positionComboBox = new JComboBox<>(Position.values());
         salarySpinner = new JSpinner();
         experienceSpinner = new JSpinner();
     
@@ -50,6 +50,7 @@ public class InspectorPanel extends ColumnsPanel
         else{
             nameField.setText(employee.getName());
             surnameField.setText(employee.getName());
+            positionComboBox.setSelectedItem(employee.getPosition());
             salarySpinner.setValue(employee.getSalary());
             experienceSpinner.setValue(employee.getExperience());
         }
