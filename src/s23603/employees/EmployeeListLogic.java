@@ -75,6 +75,7 @@ public class EmployeeListLogic
     
     public void sort(Comparator<Employee> employeeComparator){
         items.sort(employeeComparator);
+        filteredItems.sort(employeeComparator);
     }
     
     public void add(Employee employee){
