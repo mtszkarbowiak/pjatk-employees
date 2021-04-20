@@ -6,26 +6,26 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-public class UserInterface extends JFrame implements EmployeeListChangeListener
+public class UserInterface extends JFrame implements EmployeeListChangeListener, EmployeeListSelectionChanger
 {
     public static final String[] ATTRIBUTE_NAMES = {"Name", "Surname", "Position", "Salary", "Experience"};
     
-    private JMenuBar menuBar;
-    private JSplitPane contentPanel;
+    private final JMenuBar menuBar;
+    private final JSplitPane contentPanel;
     
-    private JMenu fileMenu;
-    private JMenuItem openTrigger;
-    private JMenuItem saveTrigger;
-    private JFileChooser fileChooser;
+    private final JMenu fileMenu;
+    private final JMenuItem openTrigger;
+    private final JMenuItem saveTrigger;
+    private final JFileChooser fileChooser;
     
-    private JScrollPane tableScrollPane;
-    private JTable table;
+    private final JScrollPane tableScrollPane;
+    private final JTable table;
     
-    private JTabbedPane tabs;
+    private final JTabbedPane tabs;
     private InspectorPanel inspectorPanel;
-    private SortingAndFilteringPanel sortingAndFilteringPanel;
+    private final SortingAndFilteringPanel sortingAndFilteringPanel;
     
-    private EmployeeListLogic employeeListLogic;
+    private final EmployeeListLogic employeeListLogic;
     
     
     public UserInterface(EmployeeListLogic employeeListLogic){
@@ -71,14 +71,18 @@ public class UserInterface extends JFrame implements EmployeeListChangeListener
                 table.setModel(new ExplorerTableModel(employeeListLogic));
                 table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
                 table.getSelectionModel().addListSelectionListener(e ->
-                        inspectorPanel.inspect(employeeListLogic.getFromFiltered(table.getSelectedRow()))
+                        {
+                            if(table.getSelectedRow() < 0 || table.getSelectedRow() >= employeeListLogic.sizeFiltered()) return;
+            
+                            inspectorPanel.inspect(employeeListLogic.getFromFiltered(table.getSelectedRow()));
+                        }
                 );
         
                 tableScrollPane = new JScrollPane(table);
             }
             
             {
-                inspectorPanel = new InspectorPanel();
+                inspectorPanel = new InspectorPanel(employeeListLogic, this, this);
                 sortingAndFilteringPanel = new SortingAndFilteringPanel(employeeListLogic, this);
             }
     
@@ -169,6 +173,11 @@ public class UserInterface extends JFrame implements EmployeeListChangeListener
     @Override
     public void onEmployeeListChanged(){
         table.updateUI();
+    }
+    
+    @Override
+    public void onEmployeeListNoneSelected(){
+        table.clearSelection();
     }
 }
 

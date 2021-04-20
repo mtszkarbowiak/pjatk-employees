@@ -6,12 +6,26 @@ import java.awt.*;
 
 public class InspectorPanel extends ColumnsPanel
 {
-    JTextField nameField, surnameField;
-    JComboBox<Position> positionComboBox;
-    JSpinner salarySpinner, experienceSpinner;
+    private final EmployeeListLogic employeeListLogic;
+    private final EmployeeListChangeListener employeeListChangeListener;
+    private final EmployeeListSelectionChanger employeeListSelectionChanger;
     
-    JButton modifyTrigger, cancelChangeTrigger;
-    JButton addTrigger, deleteTrigger;
+    private JTextField nameField, surnameField;
+    private JComboBox<Position> positionComboBox;
+    private JSpinner salarySpinner, experienceSpinner;
+    
+    private JButton modifyTrigger, cancelChangeTrigger;
+    private JButton addTrigger, deleteTrigger;
+    
+    private Employee cachedSelection = null;
+    
+    
+    
+    public InspectorPanel(EmployeeListLogic employeeListLogic, EmployeeListChangeListener employeeListChangeListener, EmployeeListSelectionChanger employeeListSelectionChanger){
+        this.employeeListLogic = employeeListLogic;
+        this.employeeListChangeListener = employeeListChangeListener;
+        this.employeeListSelectionChanger = employeeListSelectionChanger;
+    }
     
     @Override
     protected void buildRows()
@@ -24,9 +38,16 @@ public class InspectorPanel extends ColumnsPanel
         
         
         modifyTrigger = new JButton("Modify");
+        modifyTrigger.addActionListener(e -> onModifyTriggered());
+        
         cancelChangeTrigger = new JButton("Cancel changes");
+        cancelChangeTrigger.addActionListener(e -> onCancelChangesTriggered());
+        
         addTrigger = new JButton("Create new");
+        addTrigger.addActionListener(e -> onCreateNewTriggered());
+        
         deleteTrigger = new JButton("Delete");
+        deleteTrigger.addActionListener(e -> onDeleteTriggered());
         deleteTrigger.setForeground(Color.red);
         
     
@@ -47,6 +68,7 @@ public class InspectorPanel extends ColumnsPanel
     
     public void inspect(Employee employee)
     {
+        cachedSelection = employee;
         boolean isEmpty = employee == null;
     
         nameField.setEnabled(!isEmpty);
@@ -73,5 +95,84 @@ public class InspectorPanel extends ColumnsPanel
             salarySpinner.setValue(employee.getSalary());
             experienceSpinner.setValue(employee.getExperience());
         }
+    }
+    
+    private void onCreateNewTriggered(){
+        cachedSelection = new Employee("Name","Surname",Position.CEO,1_000,0);
+    
+        inspect(cachedSelection);
+        
+        employeeListLogic.add(cachedSelection);
+        
+        employeeListLogic.refreshFiltering();
+        employeeListChangeListener.onEmployeeListChanged();
+    
+        employeeListSelectionChanger.onEmployeeListNoneSelected();
+    }
+    
+    private void onDeleteTriggered(){
+        if(cachedSelection == null) return;
+        
+        employeeListLogic.remove(cachedSelection);
+        
+        employeeListLogic.refreshFiltering();
+        employeeListChangeListener.onEmployeeListChanged();
+        
+        inspect(null);
+    }
+    
+    private void onModifyTriggered(){
+        
+        var name = nameField.getText();
+        if(!Employee.isValidName(name)) {
+            JOptionPane.showMessageDialog(this,
+                    name + " is not a valid name.\n\n" +
+                            "The record has not been modified.",
+                    "Invalid name",
+                    JOptionPane.ERROR_MESSAGE);
+            
+            return;
+        }
+    
+        var surname = surnameField.getText();
+        if(!Employee.isValidSurname(surname)) {
+            JOptionPane.showMessageDialog(this,
+                    name + " is not a valid surname.\n\n" +
+                            "The record has not been modified.",
+                    "Invalid surname",
+                    JOptionPane.ERROR_MESSAGE);
+        
+            return;
+        }
+        
+        var position = (Position) positionComboBox.getSelectedItem();
+        var salary = (int) salarySpinner.getValue();
+        assert position != null;
+        if(!position.isValidSalary(salary)) {
+            JOptionPane.showMessageDialog(this,
+                    salary + " is not a valid salary.\n\n" + position + " must have a salary between " +
+                            position.getMinSalary() + " and " + position.getMaxSalary() + ".\n\n" +
+                            "The record has not been modified.",
+                    "Invalid salary",
+                    JOptionPane.ERROR_MESSAGE);
+        
+            return;
+        }
+        
+        var experience = (int) experienceSpinner.getValue();
+    
+        System.out.println("Modifying the record...");
+        
+        cachedSelection.setName(name);
+        cachedSelection.setSurname(surname);
+        cachedSelection.setPositionAndSalary(position,salary);
+        cachedSelection.setExperience(experience);
+    
+        employeeListLogic.refreshFiltering();
+        employeeListChangeListener.onEmployeeListChanged();
+    }
+    
+    private void onCancelChangesTriggered(){
+        inspect(cachedSelection);
     }
 }

@@ -116,4 +116,10 @@ public class EmployeeListLogic
             if(filter.test(item)) filteredItems.add(item);
         }
     }
+    
+    public void remove(Employee cachedSelection)
+    {
+        items.remove(cachedSelection);
+        filteredItems.remove(cachedSelection);
+    }
 }
