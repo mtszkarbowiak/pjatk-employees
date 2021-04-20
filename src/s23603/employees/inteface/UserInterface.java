@@ -167,7 +167,7 @@ public class UserInterface extends JFrame implements EmployeeListChangeListener
     }
     
     @Override
-    public void OnEmployeeListChanged(){
+    public void onEmployeeListChanged(){
         table.updateUI();
     }
 }

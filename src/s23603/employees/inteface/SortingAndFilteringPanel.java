@@ -96,11 +96,11 @@ public class SortingAndFilteringPanel extends ColumnsPanel
         
         positiveTrigger.addActionListener(e -> {
             employeeListLogic.sort(employeeComparator);
-            employeeListChangeListener.OnEmployeeListChanged();
+            employeeListChangeListener.onEmployeeListChanged();
         });
         negativeTrigger.addActionListener(e -> {
             employeeListLogic.sort(generateNegationComparator(employeeComparator));
-            employeeListChangeListener.OnEmployeeListChanged();
+            employeeListChangeListener.onEmployeeListChanged();
         });
         
         buildRow(positiveTrigger,negativeTrigger);
@@ -142,13 +142,12 @@ public class SortingAndFilteringPanel extends ColumnsPanel
         }
         
         employeeListLogic.setFilter(employeeListFilter);
-        employeeListChangeListener.OnEmployeeListChanged();
+        employeeListChangeListener.onEmployeeListChanged();
     }
     
     private static void updateToggleLabel(JToggleButton toggleButton){
         toggleButton.setText(toggleButton.isSelected() ? "ON" : "OFF");
     }
-    
 }
 
 class EmployeeListFilter implements Predicate<Employee>{
