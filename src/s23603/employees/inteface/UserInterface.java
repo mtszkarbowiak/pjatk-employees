@@ -6,7 +6,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-public class UserInterface extends JFrame
+public class UserInterface extends JFrame implements EmployeeListChangeListener
 {
     public static final String[] ATTRIBUTE_NAMES = {"Name", "Surname", "Position", "Salary", "Experience"};
     
@@ -22,7 +22,8 @@ public class UserInterface extends JFrame
     private JTable table;
     
     private JTabbedPane tabs;
-    private Inspector inspector;
+    private InspectorPanel inspectorPanel;
+    private SortingAndFilteringPanel sortingAndFilteringPanel;
     
     private EmployeeListIO employeeListIO;
     
@@ -70,19 +71,20 @@ public class UserInterface extends JFrame
                 table.setModel(new ExplorerTableModel(employeeListIO));
                 table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
                 table.getSelectionModel().addListSelectionListener(e ->
-                        inspector.inspect(employeeListIO.get(table.getSelectedRow()))
+                        inspectorPanel.inspect(employeeListIO.get(table.getSelectedRow()))
                 );
         
                 tableScrollPane = new JScrollPane(table);
             }
             
             {
-                inspector = new Inspector();
+                inspectorPanel = new InspectorPanel();
+                sortingAndFilteringPanel = new SortingAndFilteringPanel(employeeListIO, this);
             }
     
             tabs = new JTabbedPane();
-            tabs.addTab("Inspector", inspector);
-            tabs.addTab("Filter", new JPanel());
+            tabs.addTab("Inspector", inspectorPanel);
+            tabs.addTab("Sorting / Filtering", sortingAndFilteringPanel);
             
             contentPanel = new JSplitPane();
             contentPanel.setOrientation(JSplitPane.HORIZONTAL_SPLIT);
@@ -120,6 +122,8 @@ public class UserInterface extends JFrame
                 }
             });
         }
+        
+        inspectorPanel.inspect(null);
     }
     
     
@@ -140,6 +144,7 @@ public class UserInterface extends JFrame
         }
     
         table.updateUI();
+        inspectorPanel.inspect(null);
     }
     
     private void onFileSaveTriggered(ActionEvent e)
@@ -158,6 +163,11 @@ public class UserInterface extends JFrame
             JOptionPane.showMessageDialog(this,"File not saved.","File has not been saved due to an error.",JOptionPane.ERROR_MESSAGE);
         }
         
+        table.updateUI();
+    }
+    
+    @Override
+    public void OnEmployeeListChanged(){
         table.updateUI();
     }
 }
