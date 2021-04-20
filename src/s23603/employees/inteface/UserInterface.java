@@ -1,7 +1,6 @@
 package s23603.employees.inteface;
 
 import s23603.employees.EmployeeListIO;
-import s23603.employees.inteface.TableModel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -21,6 +20,7 @@ public class UserInterface extends JFrame
     private JTable table;
     
     private JTabbedPane tabs;
+    private InspectorPanel inspectorPanel;
     
     private EmployeeListIO employeeListIO;
     
@@ -52,13 +52,23 @@ public class UserInterface extends JFrame
         
         // Content panel setup
         {
-            table = new JTable();
-            table.setModel(new TableModel(employeeListIO));
-    
-            tableScrollPane = new JScrollPane(table);
+            {
+                table = new JTable();
+                table.setModel(new TableModel(employeeListIO));
+                table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+                table.getSelectionModel().addListSelectionListener(e ->
+                        inspectorPanel.inspect(employeeListIO.get(table.getSelectedRow()))
+                );
+        
+                tableScrollPane = new JScrollPane(table);
+            }
+            
+            {
+                inspectorPanel = new InspectorPanel();
+            }
     
             tabs = new JTabbedPane();
-            tabs.addTab("Inspector", new JPanel());
+            tabs.addTab("Inspector", inspectorPanel);
             tabs.addTab("Filter", new JPanel());
             
             contentPanel = new JSplitPane();
