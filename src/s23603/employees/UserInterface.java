@@ -1,18 +1,24 @@
 package s23603.employees;
 
 import javax.swing.*;
+import javax.swing.table.AbstractTableModel;
 import java.awt.*;
 import java.awt.event.*;
 
 public class UserInterface extends JFrame
 {
     private JMenuBar menuBar;
-    private JPanel contentPanel;
+    private JSplitPane contentPanel;
     
     private JMenu fileMenu;
     private JMenuItem openTrigger;
     private JMenuItem saveTrigger;
     private JFileChooser fileChooser;
+    
+    private JScrollPane tableScrollPane;
+    private JTable table;
+    
+    private JTabbedPane tabs;
     
     private EmployeeListIO employeeListIO;
     
@@ -24,12 +30,12 @@ public class UserInterface extends JFrame
         
         // Menu bar setup
         {
-            openTrigger = new JMenuItem("Open");
+            openTrigger = new JMenuItem("Open...");
             openTrigger.addActionListener(this::onFileOpenTriggered);
             openTrigger.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, KeyEvent.CTRL_DOWN_MASK));
             openTrigger.setToolTipText("Opens file opening dialog and prompts you when a file is opened.");
         
-            saveTrigger = new JMenuItem("Save");
+            saveTrigger = new JMenuItem("Save...");
             saveTrigger.addActionListener(this::onFileSaveTriggered);
             saveTrigger.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyEvent.CTRL_DOWN_MASK));
             openTrigger.setToolTipText("Opens file saving dialog and prompts you when a file is saved.");
@@ -44,7 +50,19 @@ public class UserInterface extends JFrame
         
         // Content panel setup
         {
-            contentPanel = new JPanel();
+            table = new JTable();
+            table.setModel(new TableModel(employeeListIO));
+    
+            tableScrollPane = new JScrollPane(table);
+    
+            tabs = new JTabbedPane();
+            tabs.addTab("Inspector", new JPanel());
+            tabs.addTab("Filter", new JPanel());
+            
+            contentPanel = new JSplitPane();
+            contentPanel.setOrientation(JSplitPane.HORIZONTAL_SPLIT);
+            contentPanel.setLeftComponent(tableScrollPane);
+            contentPanel.setRightComponent(tabs);
         }
         
         // Windows setup
@@ -62,7 +80,6 @@ public class UserInterface extends JFrame
             {
                 public void windowClosing(WindowEvent we)
                 {
-                
                     int result = JOptionPane.showConfirmDialog(frame,
                             "Do you want to save before exiting?", "Exiting",
                             JOptionPane.YES_NO_CANCEL_OPTION);
@@ -80,6 +97,7 @@ public class UserInterface extends JFrame
         }
     }
     
+    
     private void onFileOpenTriggered(ActionEvent e)
     {
         var result = fileChooser.showOpenDialog(this);
@@ -90,11 +108,13 @@ public class UserInterface extends JFrame
     
         System.out.println("Selected file: " + file.getPath());
         
-        if(employeeListIO.trySave(file)){
+        if(employeeListIO.tryOpen(file)){
             JOptionPane.showMessageDialog(this,"File opened.","File successfully opened.",JOptionPane.INFORMATION_MESSAGE);
         }else{
             JOptionPane.showMessageDialog(this,"File not opened.","File has not been opened due to an error.",JOptionPane.ERROR_MESSAGE);
         }
+    
+        table.updateUI();
     }
     
     private void onFileSaveTriggered(ActionEvent e)
@@ -112,5 +132,52 @@ public class UserInterface extends JFrame
         }else{
             JOptionPane.showMessageDialog(this,"File not saved.","File has not been saved due to an error.",JOptionPane.ERROR_MESSAGE);
         }
+        
+        table.updateUI();
+    }
+}
+
+class TableModel extends AbstractTableModel
+{
+    EmployeeListIO employeeListIO;
+    
+    public TableModel(EmployeeListIO employeeListIO){
+        this.employeeListIO = employeeListIO;
+    
+    }
+    
+    @Override
+    public int getRowCount(){
+        return employeeListIO.size();
+    }
+    
+    @Override
+    public int getColumnCount(){
+        return 5;
+    }
+    
+    @Override
+    public String getColumnName(int index) {
+        return switch(index){
+            case 0 -> "Name";
+            case 1 -> "Surname";
+            case 2 -> "Position";
+            case 3 -> "Salary";
+            case 4 -> "Experience";
+            default -> throw new IllegalArgumentException();
+        };
+    }
+    
+    @Override
+    public Object getValueAt(int rowIndex, int columnIndex)
+    {
+        return switch(columnIndex){
+            case 0 -> employeeListIO.get(rowIndex).getName();
+            case 1 -> employeeListIO.get(rowIndex).getSurname();
+            case 2 -> employeeListIO.get(rowIndex).getPosition();
+            case 3 -> employeeListIO.get(rowIndex).getSalary();
+            case 4 -> employeeListIO.get(rowIndex).getExperience();
+            default -> throw new IllegalArgumentException();
+        };
     }
 }
