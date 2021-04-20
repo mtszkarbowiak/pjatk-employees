@@ -7,7 +7,7 @@ import javax.swing.*;
 public class Main
 {
     private static UserInterface userInterface;
-    private static EmployeeListIO employeeListIO;
+    private static EmployeeListLogic employeeListLogic;
     
     public static void main(String[] args)
     {
@@ -15,12 +15,12 @@ public class Main
     
         System.out.println("Hello World!");
     
-        employeeListIO = new EmployeeListIO();
+        employeeListLogic = new EmployeeListLogic();
         
         SwingUtilities.invokeLater(Main::initUserInterface);
     }
     
     public static void initUserInterface(){
-        userInterface = new UserInterface(employeeListIO);
+        userInterface = new UserInterface(employeeListLogic);
     }
 }

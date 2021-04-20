@@ -1,23 +1,22 @@
 package s23603.employees.inteface;
 
-import s23603.employees.Employee;
-import s23603.employees.EmployeeListIO;
+import s23603.employees.EmployeeListLogic;
 
 import javax.swing.table.AbstractTableModel;
 
 class ExplorerTableModel extends AbstractTableModel
 {
-    EmployeeListIO employeeListIO;
+    EmployeeListLogic employeeListLogic;
     
-    public ExplorerTableModel(EmployeeListIO employeeListIO)
+    public ExplorerTableModel(EmployeeListLogic employeeListLogic)
     {
-        this.employeeListIO = employeeListIO;
+        this.employeeListLogic = employeeListLogic;
     }
     
     @Override
     public int getRowCount()
     {
-        return employeeListIO.size();
+        return employeeListLogic.sizeFiltered();
     }
     
     @Override
@@ -36,11 +35,11 @@ class ExplorerTableModel extends AbstractTableModel
     public Object getValueAt(int rowIndex, int columnIndex)
     {
         return switch(columnIndex){
-            case 0 -> employeeListIO.get(rowIndex).getName();
-            case 1 -> employeeListIO.get(rowIndex).getSurname();
-            case 2 -> employeeListIO.get(rowIndex).getPosition();
-            case 3 -> employeeListIO.get(rowIndex).getSalary();
-            case 4 -> employeeListIO.get(rowIndex).getExperience();
+            case 0 -> employeeListLogic.getFromFiltered(rowIndex).getName();
+            case 1 -> employeeListLogic.getFromFiltered(rowIndex).getSurname();
+            case 2 -> employeeListLogic.getFromFiltered(rowIndex).getPosition();
+            case 3 -> employeeListLogic.getFromFiltered(rowIndex).getSalary();
+            case 4 -> employeeListLogic.getFromFiltered(rowIndex).getExperience();
             default -> throw new IllegalArgumentException();
         };
     }

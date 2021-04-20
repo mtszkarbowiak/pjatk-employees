@@ -1,18 +1,18 @@
 package s23603.employees.inteface;
 
 import s23603.employees.Employee;
-import s23603.employees.EmployeeListIO;
+import s23603.employees.EmployeeListLogic;
 
 import javax.swing.*;
 import java.util.Comparator;
 
 public class SortingAndFilteringPanel extends ColumnsPanel
 {
-    private EmployeeListIO employeeListIO;
+    private EmployeeListLogic employeeListLogic;
     private EmployeeListChangeListener employeeListChangeListener;
     
-    public SortingAndFilteringPanel(EmployeeListIO employeeListIO, EmployeeListChangeListener employeeListChangeListener){
-        this.employeeListIO = employeeListIO;
+    public SortingAndFilteringPanel(EmployeeListLogic employeeListLogic, EmployeeListChangeListener employeeListChangeListener){
+        this.employeeListLogic = employeeListLogic;
         this.employeeListChangeListener = employeeListChangeListener;
     }
     
@@ -30,11 +30,11 @@ public class SortingAndFilteringPanel extends ColumnsPanel
         var negativeTrigger = new JButton(label + " (desc.)");
         
         positiveTrigger.addActionListener(e -> {
-            employeeListIO.sort(employeeComparator);
+            employeeListLogic.sort(employeeComparator);
             employeeListChangeListener.OnEmployeeListChanged();
         });
         negativeTrigger.addActionListener(e -> {
-            employeeListIO.sort(generateNegationComparator(employeeComparator));
+            employeeListLogic.sort(generateNegationComparator(employeeComparator));
             employeeListChangeListener.OnEmployeeListChanged();
         });
         

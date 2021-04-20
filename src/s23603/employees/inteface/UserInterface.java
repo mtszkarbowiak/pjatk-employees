@@ -1,6 +1,6 @@
 package s23603.employees.inteface;
 
-import s23603.employees.EmployeeListIO;
+import s23603.employees.EmployeeListLogic;
 
 import javax.swing.*;
 import java.awt.*;
@@ -25,10 +25,10 @@ public class UserInterface extends JFrame implements EmployeeListChangeListener
     private InspectorPanel inspectorPanel;
     private SortingAndFilteringPanel sortingAndFilteringPanel;
     
-    private EmployeeListIO employeeListIO;
+    private EmployeeListLogic employeeListLogic;
     
     
-    public UserInterface(EmployeeListIO employeeListIO){
+    public UserInterface(EmployeeListLogic employeeListLogic){
         super("Employees Data List");
         
         try {
@@ -42,7 +42,7 @@ public class UserInterface extends JFrame implements EmployeeListChangeListener
             }
         } catch (Exception ignored) {}
         
-        this.employeeListIO = employeeListIO;
+        this.employeeListLogic = employeeListLogic;
         
         // Menu bar setup
         {
@@ -68,10 +68,10 @@ public class UserInterface extends JFrame implements EmployeeListChangeListener
         {
             {
                 table = new JTable();
-                table.setModel(new ExplorerTableModel(employeeListIO));
+                table.setModel(new ExplorerTableModel(employeeListLogic));
                 table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
                 table.getSelectionModel().addListSelectionListener(e ->
-                        inspectorPanel.inspect(employeeListIO.get(table.getSelectedRow()))
+                        inspectorPanel.inspect(employeeListLogic.getFromFiltered(table.getSelectedRow()))
                 );
         
                 tableScrollPane = new JScrollPane(table);
@@ -79,7 +79,7 @@ public class UserInterface extends JFrame implements EmployeeListChangeListener
             
             {
                 inspectorPanel = new InspectorPanel();
-                sortingAndFilteringPanel = new SortingAndFilteringPanel(employeeListIO, this);
+                sortingAndFilteringPanel = new SortingAndFilteringPanel(employeeListLogic, this);
             }
     
             tabs = new JTabbedPane();
@@ -137,7 +137,7 @@ public class UserInterface extends JFrame implements EmployeeListChangeListener
     
         System.out.println("Selected file: " + file.getPath());
         
-        if(employeeListIO.tryOpen(file)){
+        if(employeeListLogic.tryOpen(file)){
             JOptionPane.showMessageDialog(this,"File opened.","File successfully opened.",JOptionPane.INFORMATION_MESSAGE);
         }else{
             JOptionPane.showMessageDialog(this,"File not opened.","File has not been opened due to an error.",JOptionPane.ERROR_MESSAGE);
@@ -157,7 +157,7 @@ public class UserInterface extends JFrame implements EmployeeListChangeListener
     
         System.out.println("Selected file: " + file.getPath());
     
-        if(employeeListIO.trySave(file)){
+        if(employeeListLogic.trySave(file)){
             JOptionPane.showMessageDialog(this,"File saved.","File successfully saved.",JOptionPane.INFORMATION_MESSAGE);
         }else{
             JOptionPane.showMessageDialog(this,"File not saved.","File has not been saved due to an error.",JOptionPane.ERROR_MESSAGE);

@@ -69,18 +69,18 @@ public class SelfTests
     }
 
     public static boolean employeeListIO(){
-        var employeeListIO = new EmployeeListIO();
+        var employeeListIO = new EmployeeListLogic();
         var file = new File("out\\TestFile.txt");
     
         employeeListIO.add(new Employee("Jan","Kowalski",Position.Janitor, 1_000, 20));
         employeeListIO.add(new Employee("Jan","Kowalski 2",Position.Janitor, 1_000, 20));
-        int initSize = employeeListIO.size();
+        int initSize = employeeListIO.sizeAll();
     
         boolean pass =  employeeListIO.trySave(file);
         employeeListIO.clear();
     
         pass &= employeeListIO.tryOpen(file);
-        pass &= employeeListIO.size() == initSize;
+        pass &= employeeListIO.sizeAll() == initSize;
         
         return pass;
     }
