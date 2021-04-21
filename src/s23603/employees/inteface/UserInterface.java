@@ -1,5 +1,6 @@
 package s23603.employees.inteface;
 
+import s23603.employees.Employee;
 import s23603.employees.EmployeeListLogic;
 
 import javax.swing.*;
@@ -19,7 +20,9 @@ public class UserInterface extends JFrame implements EmployeeListChangeListener,
     private final JMenu fileMenu;
     private final JMenuItem openTrigger;
     private final JMenuItem saveTrigger;
+    private final JMenu actionsMenu;
     private final JMenuItem clearTrigger;
+    private final JMenuItem clearSelectionTrigger;
     private final JFileChooser fileChooser;
     
     private final JScrollPane tableScrollPane;
@@ -61,18 +64,26 @@ public class UserInterface extends JFrame implements EmployeeListChangeListener,
             saveTrigger.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyEvent.CTRL_DOWN_MASK));
             openTrigger.setToolTipText("Opens file saving dialog and prompts you when a file is saved.");
     
-            clearTrigger = new JMenuItem("Clear");
-            clearTrigger.addActionListener(this::onClearTriggered);
+            clearTrigger = new JMenuItem("Clear workspace");
+            clearTrigger.addActionListener(this::onClearWorkspaceTriggered);
             clearTrigger.setToolTipText("Removes all loaded records.");
+    
+            clearSelectionTrigger = new JMenuItem("Clear selection");
+            clearSelectionTrigger.addActionListener(this::onClearSelectionTriggered);
+            clearSelectionTrigger.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, KeyEvent.CTRL_DOWN_MASK));
+            clearSelectionTrigger.setToolTipText("Clears selection.");
             
             fileMenu = new JMenu("File");
             fileMenu.add(openTrigger);
             fileMenu.add(saveTrigger);
-            fileMenu.addSeparator();
-            fileMenu.add(clearTrigger);
+    
+            actionsMenu = new JMenu("Actions");
+            actionsMenu.add(clearSelectionTrigger);
+            actionsMenu.add(clearTrigger);
             
             menuBar = new JMenuBar();
             menuBar.add(fileMenu);
+            menuBar.add(actionsMenu);
         }
         
         // Content panel setup
@@ -205,11 +216,17 @@ public class UserInterface extends JFrame implements EmployeeListChangeListener,
         onEmployeeListChanged();
     }
     
-    private void onClearTriggered(ActionEvent e)
+    private void onClearWorkspaceTriggered(ActionEvent e)
     {
         employeeListLogic.clear();
         
         onEmployeeListChanged();
+    }
+    
+    private void onClearSelectionTriggered(ActionEvent e)
+    {
+        onEmployeeListDeselectRequested();
+        inspectorPanel.inspect(null);
     }
     
     

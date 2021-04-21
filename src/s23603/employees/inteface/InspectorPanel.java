@@ -41,9 +41,9 @@ public class InspectorPanel extends ColumnsPanel
         modifyTrigger.setToolTipText("Confirms changes.");
         modifyTrigger.addActionListener(e -> onModifyTriggered());
         
-        cancelChangeTrigger = new JButton("Reload");
+        cancelChangeTrigger = new JButton("Unload");
         cancelChangeTrigger.setToolTipText("Dumps all changes.");
-        cancelChangeTrigger.addActionListener(e -> onCancelChangesTriggered());
+        cancelChangeTrigger.addActionListener(e -> onDeselectTriggered());
         
         addTrigger = new JButton("Create new");
         addTrigger.setToolTipText("Creates new record.");
@@ -84,11 +84,11 @@ public class InspectorPanel extends ColumnsPanel
         modifyTrigger.setEnabled(!isEmpty);
         cancelChangeTrigger.setEnabled(!isEmpty);
         deleteTrigger.setEnabled(!isEmpty);
-        addTrigger.setEnabled(true);
+        addTrigger.setEnabled(isEmpty);
         
         if(isEmpty){
-            nameField.setText("-");
-            surnameField.setText("-");
+            nameField.setText("");
+            surnameField.setText("");
             salarySpinner.setValue(0);
             experienceSpinner.setValue(0);
         }
@@ -176,7 +176,9 @@ public class InspectorPanel extends ColumnsPanel
         employeeListChangeListener.onEmployeeListChanged();
     }
     
-    private void onCancelChangesTriggered(){
-        inspect(cachedSelection);
+    private void onDeselectTriggered()
+    {
+        employeeListSelectionChanger.onEmployeeListDeselectRequested();
+        inspect(null);
     }
 }

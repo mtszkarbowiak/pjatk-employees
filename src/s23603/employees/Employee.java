@@ -7,7 +7,8 @@ public class Employee
     private int salary, experience;
     
     private static final char SEPARATOR = ';';
-    private static final String NAME_SURNAME_REGEX = "^[A-Za-z][A-Za-z0-9 .]{1,48}[A-Za-z0-9]$";
+    private static final String NAME_SURNAME_REGEX =
+            "^[\\p{L}][0-9 .\\p{L}]{1,48}[0-9\\p{L}]$";
     
     
     public Employee()
