@@ -36,7 +36,7 @@ public class UserInterface extends JFrame implements EmployeeListChangeListener,
     
     public UserInterface(EmployeeListLogic employeeListLogic)
     {
-        super("Employees Data List");
+        super("Employees");
         
         try{
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -187,8 +187,8 @@ public class UserInterface extends JFrame implements EmployeeListChangeListener,
             JOptionPane.showMessageDialog(this,
                     "File has not been opened due to an error.", "File not opened.", JOptionPane.ERROR_MESSAGE);
         }
-        
-        table.updateUI();
+    
+        onEmployeeListChanged();
         inspectorPanel.inspect(null);
     }
     
@@ -221,11 +221,13 @@ public class UserInterface extends JFrame implements EmployeeListChangeListener,
         employeeListLogic.clear();
         
         onEmployeeListChanged();
+        inspectorPanel.inspect(null);
     }
     
     private void onClearSelectionTriggered(ActionEvent e)
     {
         onEmployeeListDeselectRequested();
+        onEmployeeListChanged();
         inspectorPanel.inspect(null);
     }
     
