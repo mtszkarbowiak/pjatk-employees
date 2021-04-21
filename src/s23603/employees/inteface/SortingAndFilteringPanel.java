@@ -141,7 +141,7 @@ public class SortingAndFilteringPanel extends ColumnsPanel
             );
         }
         
-        employeeListLogic.setFilter(employeeListFilter);
+        employeeListLogic.setFilterAndRefresh(employeeListFilter);
         employeeListChangeListener.onEmployeeListChanged();
     }
     

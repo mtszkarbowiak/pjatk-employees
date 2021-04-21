@@ -4,7 +4,10 @@ import s23603.employees.EmployeeListLogic;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public class UserInterface extends JFrame implements EmployeeListChangeListener, EmployeeListSelectionChanger
 {
@@ -22,25 +25,26 @@ public class UserInterface extends JFrame implements EmployeeListChangeListener,
     private final JTable table;
     
     private final JTabbedPane tabs;
-    private InspectorPanel inspectorPanel;
     private final SortingAndFilteringPanel sortingAndFilteringPanel;
-    
     private final EmployeeListLogic employeeListLogic;
+    private InspectorPanel inspectorPanel;
     
     
-    public UserInterface(EmployeeListLogic employeeListLogic){
+    public UserInterface(EmployeeListLogic employeeListLogic)
+    {
         super("Employees Data List");
         
-        try {
+        try{
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
             
-            for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
-                if (info.getName().equals("Nimbus")) {
+            for(UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()){
+                if(info.getName().equals("Nimbus")){
                     UIManager.setLookAndFeel(info.getClassName());
                     break;
                 }
             }
-        } catch (Exception ignored) {}
+        } catch(Exception ignored){
+        }
         
         this.employeeListLogic = employeeListLogic;
         
@@ -50,16 +54,16 @@ public class UserInterface extends JFrame implements EmployeeListChangeListener,
             openTrigger.addActionListener(this::onFileOpenTriggered);
             openTrigger.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, KeyEvent.CTRL_DOWN_MASK));
             openTrigger.setToolTipText("Opens file opening dialog and prompts you when a file is opened.");
-        
+            
             saveTrigger = new JMenuItem("Save...");
             saveTrigger.addActionListener(this::onFileSaveTriggered);
             saveTrigger.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyEvent.CTRL_DOWN_MASK));
             openTrigger.setToolTipText("Opens file saving dialog and prompts you when a file is saved.");
-        
+            
             fileMenu = new JMenu("File");
             fileMenu.add(openTrigger);
             fileMenu.add(saveTrigger);
-        
+            
             menuBar = new JMenuBar();
             menuBar.add(fileMenu);
         }
@@ -73,11 +77,11 @@ public class UserInterface extends JFrame implements EmployeeListChangeListener,
                 table.getSelectionModel().addListSelectionListener(e ->
                         {
                             if(table.getSelectedRow() < 0 || table.getSelectedRow() >= employeeListLogic.sizeFiltered()) return;
-            
+                            
                             inspectorPanel.inspect(employeeListLogic.getFromFiltered(table.getSelectedRow()));
                         }
                 );
-        
+                
                 tableScrollPane = new JScrollPane(table);
             }
             
@@ -85,7 +89,7 @@ public class UserInterface extends JFrame implements EmployeeListChangeListener,
                 inspectorPanel = new InspectorPanel(employeeListLogic, this, this);
                 sortingAndFilteringPanel = new SortingAndFilteringPanel(employeeListLogic, this);
             }
-    
+            
             tabs = new JTabbedPane();
             tabs.addTab("Inspector", inspectorPanel);
             tabs.addTab("Sorting / Filtering", sortingAndFilteringPanel);
@@ -105,7 +109,7 @@ public class UserInterface extends JFrame implements EmployeeListChangeListener,
             setMinimumSize(new Dimension(450, 300));
             setSize(600, 400);
             setVisible(true);
-        
+            
             var frame = this;
             addWindowListener(new WindowAdapter()
             {
@@ -114,7 +118,7 @@ public class UserInterface extends JFrame implements EmployeeListChangeListener,
                     int result = JOptionPane.showConfirmDialog(frame,
                             "Do you want to save before exiting?", "Exiting",
                             JOptionPane.YES_NO_CANCEL_OPTION);
-    
+                    
                     switch(result){
                         case JOptionPane.YES_OPTION -> {
                             frame.onFileSaveTriggered(null);
@@ -135,18 +139,18 @@ public class UserInterface extends JFrame implements EmployeeListChangeListener,
     {
         var result = fileChooser.showOpenDialog(this);
         var file = fileChooser.getSelectedFile();
-    
+        
         if(file == null) return;
         if(result == JFileChooser.CANCEL_OPTION) return;
-    
+        
         System.out.println("Selected file: " + file.getPath());
         
         if(employeeListLogic.tryOpen(file)){
-            JOptionPane.showMessageDialog(this,"File opened.","File successfully opened.",JOptionPane.INFORMATION_MESSAGE);
-        }else{
-            JOptionPane.showMessageDialog(this,"File not opened.","File has not been opened due to an error.",JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "File opened.", "File successfully opened.", JOptionPane.INFORMATION_MESSAGE);
+        } else{
+            JOptionPane.showMessageDialog(this, "File not opened.", "File has not been opened due to an error.", JOptionPane.ERROR_MESSAGE);
         }
-    
+        
         table.updateUI();
         inspectorPanel.inspect(null);
     }
@@ -158,25 +162,28 @@ public class UserInterface extends JFrame implements EmployeeListChangeListener,
         
         if(file == null) return;
         if(result == JFileChooser.CANCEL_OPTION) return;
-    
+        
         System.out.println("Selected file: " + file.getPath());
-    
+        
         if(employeeListLogic.trySave(file)){
-            JOptionPane.showMessageDialog(this,"File saved.","File successfully saved.",JOptionPane.INFORMATION_MESSAGE);
-        }else{
-            JOptionPane.showMessageDialog(this,"File not saved.","File has not been saved due to an error.",JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "File saved.", "File successfully saved.", JOptionPane.INFORMATION_MESSAGE);
+        } else{
+            JOptionPane.showMessageDialog(this, "File not saved.", "File has not been saved due to an error.", JOptionPane.ERROR_MESSAGE);
         }
         
         table.updateUI();
     }
     
+    
     @Override
-    public void onEmployeeListChanged(){
+    public void onEmployeeListChanged()
+    {
         table.updateUI();
     }
     
     @Override
-    public void onEmployeeListNoneSelected(){
+    public void onEmployeeListDeselectRequested()
+    {
         table.clearSelection();
     }
 }

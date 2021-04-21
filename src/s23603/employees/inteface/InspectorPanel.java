@@ -90,7 +90,7 @@ public class InspectorPanel extends ColumnsPanel
         }
         else{
             nameField.setText(employee.getName());
-            surnameField.setText(employee.getName());
+            surnameField.setText(employee.getSurname());
             positionComboBox.setSelectedItem(employee.getPosition());
             salarySpinner.setValue(employee.getSalary());
             experienceSpinner.setValue(employee.getExperience());
@@ -98,7 +98,7 @@ public class InspectorPanel extends ColumnsPanel
     }
     
     private void onCreateNewTriggered(){
-        cachedSelection = new Employee("Name","Surname",Position.CEO,1_000,0);
+        cachedSelection = new Employee();
     
         inspect(cachedSelection);
         
@@ -107,7 +107,7 @@ public class InspectorPanel extends ColumnsPanel
         employeeListLogic.refreshFiltering();
         employeeListChangeListener.onEmployeeListChanged();
     
-        employeeListSelectionChanger.onEmployeeListNoneSelected();
+        employeeListSelectionChanger.onEmployeeListDeselectRequested();
     }
     
     private void onDeleteTriggered(){
@@ -124,7 +124,7 @@ public class InspectorPanel extends ColumnsPanel
     private void onModifyTriggered(){
         
         var name = nameField.getText();
-        if(!Employee.isValidName(name)) {
+        if(Employee.isNotValidName(name)) {
             JOptionPane.showMessageDialog(this,
                     name + " is not a valid name.\n\n" +
                             "The record has not been modified.",
@@ -135,7 +135,7 @@ public class InspectorPanel extends ColumnsPanel
         }
     
         var surname = surnameField.getText();
-        if(!Employee.isValidSurname(surname)) {
+        if(Employee.isNotValidSurname(surname)) {
             JOptionPane.showMessageDialog(this,
                     name + " is not a valid surname.\n\n" +
                             "The record has not been modified.",
@@ -148,7 +148,7 @@ public class InspectorPanel extends ColumnsPanel
         var position = (Position) positionComboBox.getSelectedItem();
         var salary = (int) salarySpinner.getValue();
         assert position != null;
-        if(!position.isValidSalary(salary)) {
+        if(position.isNotValidSalary(salary)) {
             JOptionPane.showMessageDialog(this,
                     salary + " is not a valid salary.\n\n" + position + " must have a salary between " +
                             position.getMinSalary() + " and " + position.getMaxSalary() + ".\n\n" +

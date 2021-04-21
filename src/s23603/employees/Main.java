@@ -12,15 +12,16 @@ public class Main
     public static void main(String[] args)
     {
         SelfTests.RunAll();
-    
+        
         System.out.println("Hello World!");
-    
+        
         employeeListLogic = new EmployeeListLogic();
         
         SwingUtilities.invokeLater(Main::initUserInterface);
     }
     
-    public static void initUserInterface(){
+    public static void initUserInterface()
+    {
         userInterface = new UserInterface(employeeListLogic);
     }
 }
