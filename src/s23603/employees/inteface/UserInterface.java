@@ -1,14 +1,12 @@
 package s23603.employees.inteface;
 
-import s23603.employees.Employee;
 import s23603.employees.EmployeeListLogic;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.awt.event.*;
+
+// Main class creating and controlling user interface.
 
 public class UserInterface extends JFrame implements EmployeeListChangeListener, EmployeeListSelectionChanger
 {

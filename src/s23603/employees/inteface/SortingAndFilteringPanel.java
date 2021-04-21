@@ -8,6 +8,8 @@ import java.util.Comparator;
 import java.util.function.Predicate;
 import java.util.regex.PatternSyntaxException;
 
+// Handles user requests to modify entire employees list.
+
 public class SortingAndFilteringPanel extends ColumnsPanel
 {
     private final EmployeeListLogic employeeListLogic;

@@ -1,5 +1,7 @@
 package s23603.employees;
 
+// Job position data representation about an employee.
+
 public enum Position
 {
     Architect(5_000, 20_000),

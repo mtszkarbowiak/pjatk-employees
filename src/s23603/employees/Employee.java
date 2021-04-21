@@ -1,5 +1,7 @@
 package s23603.employees;
 
+// Represents data about a single Employee. Provides data consistency on level of one record.
+
 public class Employee
 {
     private String name, surname;

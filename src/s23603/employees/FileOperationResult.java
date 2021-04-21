@@ -2,6 +2,8 @@ package s23603.employees;
 
 import java.util.List;
 
+// Holds read-only information saying if file reading or writing was performed with any issues.
+
 public class FileOperationResult
 {
     private final List<Integer> skippedLines;

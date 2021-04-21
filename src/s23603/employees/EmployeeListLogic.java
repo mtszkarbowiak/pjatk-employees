@@ -4,6 +4,8 @@ import java.io.*;
 import java.util.*;
 import java.util.function.Predicate;
 
+// Main logic class of the project. Controls all employees
+
 public class EmployeeListLogic
 {
     private final ArrayList<Employee> items;

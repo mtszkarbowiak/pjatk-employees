@@ -4,6 +4,8 @@ import s23603.employees.*;
 import javax.swing.*;
 import java.awt.*;
 
+// Handles user requests to modify selected employee.
+
 public class InspectorPanel extends ColumnsPanel
 {
     private final EmployeeListLogic employeeListLogic;

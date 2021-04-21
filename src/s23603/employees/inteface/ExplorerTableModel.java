@@ -1,8 +1,9 @@
 package s23603.employees.inteface;
 
 import s23603.employees.EmployeeListLogic;
-
 import javax.swing.table.AbstractTableModel;
+
+// Table model of main employee record selection table.
 
 class ExplorerTableModel extends AbstractTableModel
 {

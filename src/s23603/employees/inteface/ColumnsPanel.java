@@ -3,6 +3,8 @@ package s23603.employees.inteface;
 import javax.swing.*;
 import java.awt.*;
 
+// Abstract component enabling easier creation of layout of 2 rows (e.g. for key-value pairs).
+
 public abstract class ColumnsPanel extends JPanel
 {
     private final GridBagLayout layout;

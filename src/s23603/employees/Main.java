@@ -1,8 +1,9 @@
 package s23603.employees;
 
 import s23603.employees.inteface.UserInterface;
-
 import javax.swing.*;
+
+// Main start point of the application.
 
 public class Main
 {
@@ -11,9 +12,7 @@ public class Main
     
     public static void main(String[] args)
     {
-        SelfTests.RunAll();
-        
-        System.out.println("Hello World!");
+        // SelfTests.RunAll();
         
         employeeListLogic = new EmployeeListLogic();
         
