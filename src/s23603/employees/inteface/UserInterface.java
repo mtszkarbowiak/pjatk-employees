@@ -19,6 +19,7 @@ public class UserInterface extends JFrame implements EmployeeListChangeListener,
     private final JMenu fileMenu;
     private final JMenuItem openTrigger;
     private final JMenuItem saveTrigger;
+    private final JMenuItem clearTrigger;
     private final JFileChooser fileChooser;
     
     private final JScrollPane tableScrollPane;
@@ -59,10 +60,16 @@ public class UserInterface extends JFrame implements EmployeeListChangeListener,
             saveTrigger.addActionListener(this::onFileSaveTriggered);
             saveTrigger.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyEvent.CTRL_DOWN_MASK));
             openTrigger.setToolTipText("Opens file saving dialog and prompts you when a file is saved.");
+    
+            clearTrigger = new JMenuItem("Clear");
+            clearTrigger.addActionListener(this::onClearTriggered);
+            clearTrigger.setToolTipText("Removes all loaded records.");
             
             fileMenu = new JMenu("File");
             fileMenu.add(openTrigger);
             fileMenu.add(saveTrigger);
+            fileMenu.addSeparator();
+            fileMenu.add(clearTrigger);
             
             menuBar = new JMenuBar();
             menuBar.add(fileMenu);
@@ -194,8 +201,15 @@ public class UserInterface extends JFrame implements EmployeeListChangeListener,
         {
             JOptionPane.showMessageDialog(this, "File has not been saved due to an error.", "File not saved.", JOptionPane.ERROR_MESSAGE);
         }
+    
+        onEmployeeListChanged();
+    }
+    
+    private void onClearTriggered(ActionEvent e)
+    {
+        employeeListLogic.clear();
         
-        table.updateUI();
+        onEmployeeListChanged();
     }
     
     
