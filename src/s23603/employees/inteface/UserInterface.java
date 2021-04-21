@@ -138,18 +138,36 @@ public class UserInterface extends JFrame implements EmployeeListChangeListener,
     
     private void onFileOpenTriggered(ActionEvent e)
     {
-        var result = fileChooser.showOpenDialog(this);
+        var fileDialogResult = fileChooser.showOpenDialog(this);
         var file = fileChooser.getSelectedFile();
         
         if(file == null) return;
-        if(result == JFileChooser.CANCEL_OPTION) return;
+        if(fileDialogResult == JFileChooser.CANCEL_OPTION) return;
         
-        System.out.println("Selected file: " + file.getPath());
+        System.out.println("Opening file: " + file.getPath());
         
-        if(employeeListLogic.tryOpen(file)){
-            JOptionPane.showMessageDialog(this, "File opened.", "File successfully opened.", JOptionPane.INFORMATION_MESSAGE);
-        } else{
-            JOptionPane.showMessageDialog(this, "File not opened.", "File has not been opened due to an error.", JOptionPane.ERROR_MESSAGE);
+        var ioResult = employeeListLogic.tryOpen(file);
+        
+        if(ioResult.isNotTerminatedByException() && !ioResult.hasSkippedLines())
+        {
+            JOptionPane.showMessageDialog(this, "File successfully opened.",
+                    "File opened.", JOptionPane.INFORMATION_MESSAGE);
+        }
+        else if(ioResult.isNotTerminatedByException() && ioResult.hasSkippedLines())
+        {
+            JOptionPane.showMessageDialog(this,
+                    "File successfully opened, but some lines (" + ioResult.getSkippedLines().size()+
+                            ") have been skipped.", "File opened with problems.", JOptionPane.WARNING_MESSAGE);
+    
+            System.out.println("--- Skipped Lines ---");
+            for(var line : ioResult.getSkippedLines()){
+                System.out.print(line + ", ");
+            }
+        }
+        else
+        {
+            JOptionPane.showMessageDialog(this,
+                    "File has not been opened due to an error.", "File not opened.", JOptionPane.ERROR_MESSAGE);
         }
         
         table.updateUI();
@@ -158,18 +176,23 @@ public class UserInterface extends JFrame implements EmployeeListChangeListener,
     
     private void onFileSaveTriggered(ActionEvent e)
     {
-        var result = fileChooser.showSaveDialog(this);
+        var fileDialogResult = fileChooser.showSaveDialog(this);
         var file = fileChooser.getSelectedFile();
         
         if(file == null) return;
-        if(result == JFileChooser.CANCEL_OPTION) return;
+        if(fileDialogResult == JFileChooser.CANCEL_OPTION) return;
         
-        System.out.println("Selected file: " + file.getPath());
+        System.out.println("Saving file: " + file.getPath());
         
-        if(employeeListLogic.trySave(file)){
-            JOptionPane.showMessageDialog(this, "File saved.", "File successfully saved.", JOptionPane.INFORMATION_MESSAGE);
-        } else{
-            JOptionPane.showMessageDialog(this, "File not saved.", "File has not been saved due to an error.", JOptionPane.ERROR_MESSAGE);
+        var ioResult = employeeListLogic.trySave(file);
+        
+        if(ioResult.isNotTerminatedByException())
+        {
+            JOptionPane.showMessageDialog(this, "File successfully saved.", "File saved.", JOptionPane.INFORMATION_MESSAGE);
+        }
+        else
+        {
+            JOptionPane.showMessageDialog(this, "File has not been saved due to an error.", "File not saved.", JOptionPane.ERROR_MESSAGE);
         }
         
         table.updateUI();

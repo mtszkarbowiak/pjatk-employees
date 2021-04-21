@@ -89,38 +89,48 @@ public class EmployeeListLogic
     
     
     
-    public boolean tryOpen(File file)
+    public FileOperationResult tryOpen(File file)
     {
         clear();
         
         try(var scanner = new Scanner(file)){
+            var skippedLines = new LinkedList<Integer>();
+            int lineCount = 0;
             
             while(scanner.hasNextLine()){
                 var employee = new Employee();
                 var line = scanner.nextLine();
                 
-                if(!employee.tryDeserialize(line)) return false;
+                if(employee.tryDeserialize(line)){
+                    add(employee);
+    
+                    refreshFiltering();
+                }
+                else{
+                    skippedLines.add(lineCount);
+                }
                 
-                add(employee);
-                
-                refreshFiltering();
+    
+                lineCount++;
             }
             
-            return true;
+            return FileOperationResult.doneWithSkippedLines(skippedLines);
+            
         } catch(IOException e){
             e.printStackTrace();
-            return false;
+            
+            return FileOperationResult.terminatedByException(e);
         }
     }
     
-    public boolean trySave(File file)
+    public FileOperationResult trySave(File file)
     {
         FileWriter fileWriter = null;
         
         try{
             if(!file.exists()){
                 if(!file.createNewFile())
-                    return false;
+                    return FileOperationResult.terminatedByException(new FileNotFoundException());
             }
             
             fileWriter = new FileWriter(file);
@@ -130,11 +140,11 @@ public class EmployeeListLogic
                 fileWriter.write('\n');
             }
             
-            return true;
+            return FileOperationResult.done();
             
         } catch(IOException e){
             e.printStackTrace();
-            return false;
+            return FileOperationResult.terminatedByException(e);
             
         } finally{
             if(fileWriter != null){
