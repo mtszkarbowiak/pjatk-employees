@@ -6,7 +6,7 @@ import java.awt.*;
 public abstract class ColumnsPanel extends JPanel
 {
     private final GridBagLayout layout;
-    private int inspectionRow = 0;
+    private int builtRow = 0;
     
     public ColumnsPanel()
     {
@@ -35,9 +35,9 @@ public abstract class ColumnsPanel extends JPanel
     
     protected void buildRow(Component left, Component right)
     {
-        var leftConstraints = generateConstraints(0, inspectionRow);
-        var rightConstraints = generateConstraints(1, inspectionRow);
-        inspectionRow++;
+        var leftConstraints = generateConstraints(0, builtRow);
+        var rightConstraints = generateConstraints(1, builtRow);
+        builtRow++;
         
         add(left, leftConstraints);
         layout.addLayoutComponent(left, leftConstraints);
@@ -49,7 +49,7 @@ public abstract class ColumnsPanel extends JPanel
     {
         var constraints = new GridBagConstraints();
         constraints.gridx = 0;
-        constraints.gridy = inspectionRow;
+        constraints.gridy = builtRow;
         constraints.gridwidth = 2;
         constraints.gridheight = 1;
         constraints.weightx = 1.0f;
@@ -64,6 +64,6 @@ public abstract class ColumnsPanel extends JPanel
         
         add(label, constraints);
         layout.addLayoutComponent(label, constraints);
-        inspectionRow++;
+        builtRow++;
     }
 }

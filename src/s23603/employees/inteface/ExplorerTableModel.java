@@ -16,7 +16,7 @@ class ExplorerTableModel extends AbstractTableModel
     @Override
     public int getRowCount()
     {
-        return employeeListLogic.sizeFiltered();
+        return employeeListLogic.size();
     }
     
     @Override
@@ -35,11 +35,11 @@ class ExplorerTableModel extends AbstractTableModel
     public Object getValueAt(int rowIndex, int columnIndex)
     {
         return switch(columnIndex){
-            case 0 -> employeeListLogic.getFromFiltered(rowIndex).getName();
-            case 1 -> employeeListLogic.getFromFiltered(rowIndex).getSurname();
-            case 2 -> employeeListLogic.getFromFiltered(rowIndex).getPosition();
-            case 3 -> employeeListLogic.getFromFiltered(rowIndex).getSalary();
-            case 4 -> employeeListLogic.getFromFiltered(rowIndex).getExperience();
+            case 0 -> employeeListLogic.get(rowIndex).getName();
+            case 1 -> employeeListLogic.get(rowIndex).getSurname();
+            case 2 -> employeeListLogic.get(rowIndex).getPosition();
+            case 3 -> employeeListLogic.get(rowIndex).getSalary();
+            case 4 -> employeeListLogic.get(rowIndex).getExperience();
             default -> throw new IllegalArgumentException();
         };
     }

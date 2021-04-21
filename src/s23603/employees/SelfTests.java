@@ -81,13 +81,13 @@ public class SelfTests
         
         employeeListIO.add(new Employee("Jan", "Kowalski", Position.Janitor, 1_000, 20));
         employeeListIO.add(new Employee("Jan", "Kowalski 2", Position.Janitor, 1_000, 20));
-        int initSize = employeeListIO.sizeAll();
+        int initSize = employeeListIO.sizeOfAll();
         
         boolean pass = employeeListIO.trySave(file);
         employeeListIO.clear();
         
         pass &= employeeListIO.tryOpen(file);
-        pass &= employeeListIO.sizeAll() == initSize;
+        pass &= employeeListIO.sizeOfAll() == initSize;
         
         return pass;
     }

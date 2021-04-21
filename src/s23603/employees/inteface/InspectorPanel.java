@@ -38,20 +38,24 @@ public class InspectorPanel extends ColumnsPanel
         
         
         modifyTrigger = new JButton("Modify");
+        modifyTrigger.setToolTipText("Confirms changes.");
         modifyTrigger.addActionListener(e -> onModifyTriggered());
         
-        cancelChangeTrigger = new JButton("Cancel changes");
+        cancelChangeTrigger = new JButton("Reload");
+        cancelChangeTrigger.setToolTipText("Dumps all changes.");
         cancelChangeTrigger.addActionListener(e -> onCancelChangesTriggered());
         
         addTrigger = new JButton("Create new");
+        addTrigger.setToolTipText("Creates new record.");
         addTrigger.addActionListener(e -> onCreateNewTriggered());
         
         deleteTrigger = new JButton("Delete");
+        deleteTrigger.setToolTipText("Deletes inspected record.");
         deleteTrigger.addActionListener(e -> onDeleteTriggered());
         deleteTrigger.setForeground(Color.red);
         
     
-        buildSectionTitle("Attributes","Editable attributes of selected employee. Confirm to validate and apply changes.");
+        buildSectionTitle("Attributes","Editable attributes of selected employee.");
         buildLabeledEditorRow(UserInterface.ATTRIBUTE_NAMES[0],nameField);
         buildLabeledEditorRow(UserInterface.ATTRIBUTE_NAMES[1],surnameField);
         buildLabeledEditorRow(UserInterface.ATTRIBUTE_NAMES[2],positionComboBox);
@@ -137,7 +141,7 @@ public class InspectorPanel extends ColumnsPanel
         var surname = surnameField.getText();
         if(Employee.isNotValidSurname(surname)) {
             JOptionPane.showMessageDialog(this,
-                    name + " is not a valid surname.\n\n" +
+                    surname + " is not a valid surname.\n\n" +
                             "The record has not been modified.",
                     "Invalid surname",
                     JOptionPane.ERROR_MESSAGE);

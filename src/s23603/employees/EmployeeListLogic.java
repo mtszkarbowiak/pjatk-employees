@@ -1,16 +1,13 @@
 package s23603.employees;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Scanner;
+import java.io.*;
+import java.util.*;
 import java.util.function.Predicate;
 
 public class EmployeeListLogic
 {
-    private ArrayList<Employee> items, filteredItems;
+    private final ArrayList<Employee> items;
+    private final ArrayList<Employee> filteredItems;
     private Predicate<Employee> filter;
     
     public EmployeeListLogic()
@@ -25,7 +22,9 @@ public class EmployeeListLogic
     public void add(Employee employee)
     {
         items.add(employee);
-        filteredItems.remove(employee);
+        
+        if(filter.test(employee))
+            filteredItems.add(employee);
     }
     
     public void remove(Employee cachedSelection)
@@ -48,12 +47,12 @@ public class EmployeeListLogic
     
     
     
-    public int sizeAll()
+    public int sizeOfAll()
     {
         return items.size();
     }
     
-    public int sizeFiltered()
+    public int size()
     {
         return filteredItems.size();
     }
@@ -65,7 +64,7 @@ public class EmployeeListLogic
         return items.get(index);
     }
     
-    public Employee getFromFiltered(int index)
+    public Employee get(int index)
     {
         return filteredItems.get(index);
     }

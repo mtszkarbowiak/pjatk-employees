@@ -76,9 +76,9 @@ public class UserInterface extends JFrame implements EmployeeListChangeListener,
                 table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
                 table.getSelectionModel().addListSelectionListener(e ->
                         {
-                            if(table.getSelectedRow() < 0 || table.getSelectedRow() >= employeeListLogic.sizeFiltered()) return;
+                            if(table.getSelectedRow() < 0 || table.getSelectedRow() >= employeeListLogic.size()) return;
                             
-                            inspectorPanel.inspect(employeeListLogic.getFromFiltered(table.getSelectedRow()));
+                            inspectorPanel.inspect(employeeListLogic.get(table.getSelectedRow()));
                         }
                 );
                 
@@ -98,6 +98,7 @@ public class UserInterface extends JFrame implements EmployeeListChangeListener,
             contentPanel.setOrientation(JSplitPane.HORIZONTAL_SPLIT);
             contentPanel.setLeftComponent(tableScrollPane);
             contentPanel.setRightComponent(tabs);
+            contentPanel.setDividerLocation(500);
         }
         
         // Windows setup
@@ -107,7 +108,7 @@ public class UserInterface extends JFrame implements EmployeeListChangeListener,
             setJMenuBar(menuBar);
             setContentPane(contentPanel);
             setMinimumSize(new Dimension(450, 300));
-            setSize(600, 400);
+            setSize(800, 500);
             setVisible(true);
             
             var frame = this;
