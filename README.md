@@ -21,6 +21,8 @@ Application...
 Application has 4 sections: a *bar* on a top, a *table* on the left, and an *inspector and sorting / filtering* section
 on the right.
 
+![Screenshot1](./docs/scss/1.png)
+
 **Bar** allows doing basic file operations, i.e. saving and opening files.
 
 
@@ -32,8 +34,7 @@ on the right.
 Remember to use *Modify* button to confirm input changes. To create a new record click *Create new*. Remember also that
 you can create a new one only when you are done with modifying previous record. To do that *Unload* previous record.
 
-![Screenshot1](./docs/scss/1.png)
-
+![Screenshot1](./docs/scss/2.png)
 
 **Sorting / Filtering** enables, as the name suggest, sorting and filtering.
 
@@ -44,8 +45,6 @@ Filtering of records can be executed with switchable 2 methods: numerically and 
 or experience required to show the record.
 
 Remember that filtering is only cosmetic. To see all records, turn off both filters.
-
-![Screenshot1](./docs/scss/2.png)
 
 ## Implementation
 
